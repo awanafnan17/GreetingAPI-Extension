@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Greeting Submission</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS for styling -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Test Greeting Submission</h1>
+        <form id="greeting-form" action="/myapp/test-submit-greeting/" method="post" class="mt-4">
+            <div class="form-group">
+                <label for="greeting-input">Enter your greeting:</label>
+                <input type="text" id="greeting-input" name="greeting" class="form-control" placeholder="Hello, Open edX!">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+        <div id="result-message" class="mt-3 text-center"></div>
+    </div>
+    
+    <!-- Add Bootstrap JS and jQuery for Bootstrap components (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('greeting-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const greeting = document.getElementById('greeting-input').value;
+            
+            fetch('/test-submit-greeting/', {
+                method: 'POST',
+                body: new URLSearchParams({ greeting }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultMessage = document.getElementById('result-message');
+                resultMessage.textContent = 'Greeting submitted successfully: ' + data.message;
+                resultMessage.classList.add('text-success');
+            })
+            .catch(error => {
+                console.error(error);
+                const resultMessage = document.getElementById('result-message');
+                resultMessage.textContent = 'An error occurred.';
+                resultMessage.classList.add('text-danger');
+            });
+        });
+    </script>
+</body>
+</html>
